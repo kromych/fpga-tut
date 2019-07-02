@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include <stdlib.h>
+
+#include <memory>
 
 #include "obj_dir/Vthruwire.h"
 
@@ -9,9 +10,9 @@ int main(int argc, char **argv)
 {
     Verilated::commandArgs(argc, argv);
 
-    Vthruwire *tb = new Vthruwire();
+    auto tb = std::make_unique<Vthruwire>();
 
-    for (int k = 0; k < MAX_STEPS; ++k) 
+    for (auto k = 0U; k < MAX_STEPS; ++k) 
     {       
         tb->i_sw = k & 1;
         tb->eval();
