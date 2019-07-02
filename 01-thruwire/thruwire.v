@@ -1,3 +1,18 @@
+/*
+    Thruwire
+    ---------
+
+            FPGA
+            +---------------+
+            |               |
+      i_sw  |               |  o_led
+    --------+---------------+---------
+            |               |
+            |               |
+            +---------------+
+
+*/
+
 `default_nettype none
 
 module thruwire (i_sw, o_led);
