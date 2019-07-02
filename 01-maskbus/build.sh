@@ -1,5 +1,5 @@
 #!/bin/sh
 
-PRJ_NAME=thruwire
+PRJ_NAME=maskbus
 
 . ../00-build/build-main.sh

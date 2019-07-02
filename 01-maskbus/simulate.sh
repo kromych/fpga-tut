@@ -1,4 +1,4 @@
 #!/bin/bash
 
-PRJ_NAME=thruwire
+PRJ_NAME=maskbus
 . ../00-infra/simulate-main.sh
