@@ -2,4 +2,4 @@
 
 PRJ_NAME=thruwire
 
-. ../00-build/build-main.sh
+. ../00-infra/build-main.sh

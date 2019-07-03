@@ -9,7 +9,7 @@ BIT_STREAM="${OUT_DIR}/${PRJ_NAME}.bin"
 
 YOSYS=yosys
 SYNTH="synth_ice40 -json ${JSON}"
-PNR='/usr/local/bin/nextpnr-ice40 --hx8k --package ct256'
+PNR='/usr/local/bin/nextpnr-ice40 --hx1k --package vq100'
 PACK=icepack
 
 rm -rf ${OUT_DIR}
