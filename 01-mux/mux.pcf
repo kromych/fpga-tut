@@ -1,0 +1,5 @@
+set_io i_a      P13
+set_io i_b      P12
+set_io i_sel    P11
+
+set_io o_led    C8
