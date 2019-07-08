@@ -2,4 +2,4 @@
 
 PRJ_NAME=maskbus
 
-. ../00-build/build-main.sh
+. ../00-infra/build-main.sh

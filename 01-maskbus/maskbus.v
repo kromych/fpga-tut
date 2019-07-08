@@ -8,38 +8,28 @@
        i_sw[0]  |               |  o_led[0]
      -----------+-----NOT-------+------------
        i_sw[1]  |               |  o_led[1]
-     -----------+-----NOT-------+------------
+     -----------+---------------+------------
        i_sw[2]  |               |  o_led[2]
      -----------+-----NOT-------+------------
        i_sw[3]  |               |  o_led[3]
-     -----------+---------------+------------
-       i_sw[4]  |               |  o_led[4]
-     -----------+---------------+------------
-       i_sw[5]  |               |  o_led[5]
-     -----------+---------------+------------
-       i_sw[6]  |               |  o_led[6]
-     -----------+---------------+------------
-       i_sw[7]  |               |  o_led[7]
-     -----------+-----NOT-------+------------
-       i_sw[8]  |               |  o_led[8]
      -----------+---------------+------------
                 |               |
                 |               |
                 +---------------+
 
-The mask is 0x87.
+The mask is 0b1010.
 
 */
 
 `default_nettype none
 
 module maskbus(i_sw, o_led);
-    input wire [8:0] i_sw;
-    output wire [8:0] o_led;
+    input wire [3:0] i_sw;
+    output wire [3:0] o_led;
 
-    wire [8:0] w_internal;
+    wire [3:0] w_internal;
 
-    assign w_internal = 9'h87;
+    assign w_internal = 4'b1010;
     assign o_led = i_sw ^ w_internal;
 
 endmodule
