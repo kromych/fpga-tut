@@ -1,0 +1,6 @@
+set_io i_nibble[0] P13
+set_io i_nibble[1] P12
+set_io i_nibble[2] P11
+set_io i_nibble[3] P10
+
+set_io o_parity C1
