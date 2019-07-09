@@ -2,13 +2,27 @@
     UART Echo
 
     +-------+         +------+
-    |       | o_tx    |      |
-    |       +---------+      +
+    |       |    o_tx |      |
+    |     rx+---------+tx    |
     |  PC   |         | FPGA |
-    |       +---------+      +
-    |       | i_rx    |      |
+    |     tx+---------+rx    |
+    |       |    i_rx |      |
     +-------+         +------+
 
+*/
+
+/*
+    To observe local echo: 
+
+        tio -e /dev/ttyUSB0
+    or
+        screen /dev/ttyUSB0
+    or
+        socat - /dev/ttyS15,raw,echo=1,setsid,sane
+    or 
+        the scripts (connect.sh, femtocom.sh)
+
+    For a EZSync012 cable, the signals are GND(Black), TXD(Orange), RXD(Yellow).
 */
 
 `default_nettype none
