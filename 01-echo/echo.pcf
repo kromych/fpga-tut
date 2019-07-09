@@ -1,0 +1,2 @@
+set_io i_rx P13
+set_io o_tx C8
