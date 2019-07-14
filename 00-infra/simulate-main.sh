@@ -2,7 +2,7 @@
 
 rm -rf obj_dir
 
-verilator -Wall -cc ${VER_OPTIONS} ${PRJ_NAME}.v
+verilator -Wall -cc ${SIM_OPTIONS} ${PRJ_NAME}.v
 cd obj_dir/
 make -f "V${PRJ_NAME}.mk"
 cd ..
