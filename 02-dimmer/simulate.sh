@@ -1,4 +1,4 @@
 PRJ_NAME=dimmer
-SIM_OPTIONS="-GWIDTH=5 -GPWM=2 --trace"
+SIM_OPTIONS="-GWIDTH=10 -GPWM=3 --trace"
 
 . ../00-infra/simulate-main.sh

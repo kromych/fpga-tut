@@ -36,7 +36,7 @@ int main(int argc, char **argv)
     {
         tick(k + 1, tb.get(), trace.get());
 
-        printf("led: 0x%x\n", tb->o_led & 0x3);
+        printf("led: 0x%x\n", tb->o_led);
     }
 
     return 0;
