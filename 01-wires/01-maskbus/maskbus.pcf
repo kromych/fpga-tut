@@ -1,0 +1,23 @@
+# -----------------------------------------------------------------------------
+#- Go board constraint file (.pcf)
+#- By Juan Gonzalez (Obijuan)
+#- April - 2016
+#- GPL license
+#- Data obtained from the go-board official constraint file:
+#-   https://www.nandland.com/goboard/Go_Board_Constraints.pcf
+#-
+# -----------------------------------------------------------------------------
+# --  Board info: https://www.nandland.com/goboard/introduction.html
+# --  Pinout: https://www.nandland.com/goboard/images/Go_Board_V1.pdf
+
+# ------------ User Leds ------------------------------------------------------
+set_io --warn-no-port o_led[0]  56
+set_io --warn-no-port o_led[1]  57
+set_io --warn-no-port o_led[2]  59
+set_io --warn-no-port o_led[3]  60
+
+# ------------ User push-buttons ----------------------------------------------
+set_io --warn-no-port i_sw[0]  53
+set_io --warn-no-port i_sw[1]  51
+set_io --warn-no-port i_sw[2]  54
+set_io --warn-no-port i_sw[3]  52

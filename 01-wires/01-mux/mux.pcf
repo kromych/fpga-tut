@@ -1,0 +1,8 @@
+set_io --warn-no-port o_led  56
+set_io --warn-no-port o_led1  57
+set_io --warn-no-port o_led2  59
+set_io --warn-no-port o_led3  60
+
+set_io --warn-no-port i_sel  53
+set_io --warn-no-port i_a  51
+set_io --warn-no-port i_b  54
