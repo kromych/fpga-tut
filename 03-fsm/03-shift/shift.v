@@ -25,7 +25,7 @@ module shift(i_clk, o_led);
 
     initial o_led = 8'h1;
 
-    parameter WIDTH = 27;
+    parameter WIDTH = 25;
 
     reg [WIDTH-1:0] counter;
     reg stb;
