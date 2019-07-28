@@ -60,9 +60,15 @@ PRJ_NAME=${PRJ_NAME}
 . ../00-infra/simulate-main.sh
 EOT
 
+cat <<EOT > upload.sh
+iceprog v_out/${PRJ_NAME}.bin
+EOT
+
 chmod +x build.sh
 chmod +x simulate.sh
+chmod +x upload.sh
 
 git add build.sh
 git add simulate.sh
+git add upload.sh
 git add ${PRJ_NAME}.*
