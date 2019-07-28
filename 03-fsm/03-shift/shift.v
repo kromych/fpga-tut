@@ -20,14 +20,19 @@
 `default_nettype none
 
 module shift(i_clk, o_led);
+    parameter COUNTER_WIDTH = 25;
+    parameter LED_COUNT = 4;
+
     input wire i_clk;
-    output wire[3:0] o_led;
+    output reg[LED_COUNT-1:0] o_led;
 
-    initial o_led = 8'h1;
+`ifndef verilator
+    initial o_led = LED_COUNT'h1;
+`else
+    initial o_led = 4'h1;
+`endif
 
-    parameter WIDTH = 25;
-
-    reg [WIDTH-1:0] counter;
+    reg [COUNTER_WIDTH-1:0] counter;
     reg stb;
 
     initial {stb, counter} = 0;
@@ -41,7 +46,7 @@ module shift(i_clk, o_led);
     begin
         if (stb)
         begin
-            o_led <= {o_led[2:0], o_led[3]};
+            o_led <= {o_led[LED_COUNT-2:0], o_led[LED_COUNT-1]};
         end    
     end
 
