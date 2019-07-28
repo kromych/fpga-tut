@@ -108,59 +108,44 @@ module walker(i_clk, o_led);
         if (stb)
         begin
             case (led_state)
-                led_state_0:
-                            begin
-                                led_state <= led_state_1;
-                                o_led <= 4'h01;
-                            end
-                led_state_1:
-                            begin
-                                led_state <= led_state_2;
-                                o_led <= 4'h02;
-                            end
-                led_state_2:
-                            begin
-                                led_state <= led_state_3;
-                                o_led <= 4'h04;
-                            end
-                led_state_3:
-                            begin
-                                led_state <= led_state_4;
-                                o_led <= 4'h08;
-                            end
-                led_state_4:
-                            begin
-                                led_state <= led_state_5;
-                                o_led <= 4'h04;
-                            end
-                led_state_5:
-                            begin
-                                led_state <= led_state_0;
-                                o_led <= 4'h02;
-                            end
-                default:                        
-                            begin
-                                led_state <= led_state_0;
-                                o_led <= 4'h00;
-                            end
+                led_state_0:    led_state <= led_state_1;
+                led_state_1:    led_state <= led_state_2;
+                led_state_2:    led_state <= led_state_3;
+                led_state_3:    led_state <= led_state_4;
+                led_state_4:    led_state <= led_state_5;
+                led_state_5:    led_state <= led_state_0;
+                default:        led_state <= led_state_0;
             endcase
         end
+    end
+
+    always @(led_state) 
+    begin
+        case (led_state)
+            led_state_0:    o_led = 4'h01;
+            led_state_1:    o_led = 4'h02;
+            led_state_2:    o_led = 4'h04;
+            led_state_3:    o_led = 4'h08;
+            led_state_4:    o_led = 4'h04;
+            led_state_5:    o_led = 4'h02;
+            default:        o_led = 4'h00;
+        endcase
     end
 
 endmodule
 
 /*
-   Number of wires:                 17
-   Number of wire bits:             95
+   Number of wires:                 12
+   Number of wire bits:             90
    Number of public wires:           5
    Number of public wire bits:      34
    Number of memories:               0
    Number of memory bits:            0
    Number of processes:              0
-   Number of cells:                 92
+   Number of cells:                 87
      SB_CARRY                       24
      SB_DFF                         25
      SB_DFFE                         1
-     SB_DFFESR                       7
-     SB_LUT4                        35
+     SB_DFFESR                       3
+     SB_LUT4                        34
 */
