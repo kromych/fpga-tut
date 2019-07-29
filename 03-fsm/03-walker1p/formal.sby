@@ -1,9 +1,11 @@
 [options]
 mode prove
-#depth 20
+depth 20
 
 [engines]
-smtbmc
+#smtbmc
+aiger suprove
+#aiger avy
 
 [script]
 read -formal walker.v

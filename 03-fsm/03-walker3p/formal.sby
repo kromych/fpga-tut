@@ -1,12 +1,15 @@
 [options]
 mode prove
-#depth 20
+#mode cover
+depth 20
 
 [engines]
-smtbmc
+#smtbmc
+aiger suprove
+#aiger avy
 
 [script]
-read -formal walker.v
+read -sv -formal walker.v
 prep -top walker
 
 [files]

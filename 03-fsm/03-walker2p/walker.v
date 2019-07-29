@@ -128,7 +128,7 @@ module walker(i_clk, o_led);
             led_state_3:    o_led = 4'h08;
             led_state_4:    o_led = 4'h04;
             led_state_5:    o_led = 4'h02;
-            default:        o_led = 4'h00;
+            default:        o_led = 4'h01;
         endcase
     end
 
