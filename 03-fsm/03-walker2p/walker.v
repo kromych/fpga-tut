@@ -132,6 +132,20 @@ module walker(i_clk, o_led);
         endcase
     end
 
+//  sby -f formal.sby 
+
+`ifdef FORMAL
+    always @(posedge i_clk)
+    begin
+        assert(led_state <= led_state_5);
+    end
+
+    always @(*)
+    begin
+        assert(led_state <= led_state_5);
+    end
+`endif
+
 endmodule
 
 /*

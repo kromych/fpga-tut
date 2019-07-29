@@ -1,0 +1,14 @@
+[options]
+#mode prove
+mode bmc
+#depth 20
+
+[engines]
+smtbmc
+
+[script]
+read -formal walker.v
+prep -top walker
+
+[files]
+walker.v
