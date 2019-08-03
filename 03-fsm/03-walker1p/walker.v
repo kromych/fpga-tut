@@ -96,7 +96,10 @@ module walker(i_clk, o_led);
     parameter led_state_4 = 3'b100; /* x x 0 x  */
     parameter led_state_5 = 3'b101; /* x 0 x x  */
 
-    initial {o_led, stb, counter, led_state} = 0;
+    initial {stb, counter} = 0;
+
+    initial led_state = led_state_0;
+    initial o_led = 1'b1;
 
     always @(posedge i_clk) 
     begin
@@ -164,17 +167,17 @@ module walker(i_clk, o_led);
 endmodule
 
 /*
-   Number of wires:                 17
-   Number of wire bits:             95
+   Number of wires:                 18
+   Number of wire bits:             96
    Number of public wires:           5
    Number of public wire bits:      34
    Number of memories:               0
    Number of memory bits:            0
    Number of processes:              0
-   Number of cells:                 92
+   Number of cells:                 93
      SB_CARRY                       24
      SB_DFF                         25
-     SB_DFFE                         1
-     SB_DFFESR                       7
-     SB_LUT4                        35
+     SB_DFFE                         2
+     SB_DFFESR                       6
+     SB_LUT4                        36
 */

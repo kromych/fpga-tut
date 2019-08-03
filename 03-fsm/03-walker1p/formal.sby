@@ -1,10 +1,12 @@
+# sby -f formal.sby
+
 [options]
 mode prove
 depth 20
 
 [engines]
-#smtbmc
-aiger suprove
+smtbmc
+#aiger suprove
 #aiger avy
 
 [script]

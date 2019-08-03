@@ -97,7 +97,11 @@ module walker(i_clk, o_led);
     parameter led_state_4 = 3'b100; /* x x 0 x  */
     parameter led_state_5 = 3'b101; /* x 0 x x  */
 
-    initial {o_led, stb, counter, led_state, next_led_state} = 0;
+    initial {stb, counter} = 0;
+    
+    initial led_state = led_state_0;
+    initial next_led_state = led_state_1;
+    initial o_led = 1'b1;
 
     always @(posedge i_clk) 
     begin

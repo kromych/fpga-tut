@@ -1,11 +1,14 @@
+# sby -f formal.sby
+
 [options]
-mode prove
+#mode prove
+mode bmc
 #mode cover
 depth 20
 
 [engines]
-#smtbmc
-aiger suprove
+smtbmc
+#aiger suprove
 #aiger avy
 
 [script]
