@@ -15,6 +15,6 @@ PACK=icepack
 rm -rf ${OUT_DIR}
 mkdir ${OUT_DIR}
 
-${YOSYS} -p "${SYNTH}" "${PRJ_NAME}.v"
+${YOSYS} -p "${SYNTH}" "${PRJ_NAME}.sv"
 ${PNR} --pcf "${PCF}" --json "${JSON}" --asc "${ASCII}"
 ${PACK} "${ASCII}" "${BIT_STREAM}"

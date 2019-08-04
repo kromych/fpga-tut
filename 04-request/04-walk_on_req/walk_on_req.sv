@@ -36,51 +36,45 @@
 
 `default_nettype none
 
-module walk_on_req(i_clk, i_req, o_led);
-    parameter COUNTER_WIDTH = 25;
+module walk_on_req
+    # (parameter COUNTER_WIDTH = 25)
+    (input wire i_clk,
+    input wire i_req,
+    output logic[3:0] o_led);
 
-    input wire i_clk;
-    input wire i_req;
-    output reg[3:0] o_led;
+    localparam led_state_off = 3'b110; /* x x x x  */
 
-    reg [COUNTER_WIDTH-1:0] counter;
-    wire stb;
+    localparam led_state_0 = 3'b000; /* 0 x x x  */
+    localparam led_state_1 = 3'b001; /* x 0 x x  */
+    localparam led_state_2 = 3'b010; /* x x 0 x  */
+    localparam led_state_3 = 3'b011; /* x x x 0  */
+    localparam led_state_4 = 3'b100; /* x x 0 x  */
+    localparam led_state_5 = 3'b101; /* x 0 x x  */
 
-    reg [2:0] led_state;
+    logic [COUNTER_WIDTH-1:0] counter = 0;
+    logic stb = 1'b0;
 
-    parameter led_state_off = 3'b110; /* x x x x  */
-
-    parameter led_state_0 = 3'b000; /* 0 x x x  */
-    parameter led_state_1 = 3'b001; /* x 0 x x  */
-    parameter led_state_2 = 3'b010; /* x x 0 x  */
-    parameter led_state_3 = 3'b011; /* x x x 0  */
-    parameter led_state_4 = 3'b100; /* x x 0 x  */
-    parameter led_state_5 = 3'b101; /* x 0 x x  */
-
-    initial counter = 0;
-    
-    initial led_state = led_state_off;
+    logic [2:0] led_state = led_state_off;
+   
     initial o_led = 4'h00;
-
-    reg stb = 1'b0;
    
     // Busy
 
-    reg busy;
+    logic busy;
 
     // Debounce i_req
 
-    reg req             = 1'b0;
-    reg req_sync_pipe   = 1'b0;
-    reg req_last        = 1'b0;
-    reg start_walking   = 1'b0;
+    logic req             = 1'b0;
+    logic req_sync_pipe   = 1'b0;
+    logic req_last        = 1'b0;
+    logic start_walking   = 1'b0;
 
-    always @(posedge i_clk)
+    always_ff @(posedge i_clk)
     begin
 	    {req, req_sync_pipe} <= {req_sync_pipe, i_req};
     end
 
-    always @(posedge i_clk)
+    always_ff @(posedge i_clk)
     begin
         req_last <= req;
         start_walking <= req && !req_last;
@@ -88,14 +82,14 @@ module walk_on_req(i_clk, i_req, o_led);
 
     // Divide the clock
 
-    always @(posedge i_clk) 
+    always_ff @(posedge i_clk) 
     begin
         {stb, counter} <= counter + 1'b1;
     end
 
     // Change state
 
-    always @(posedge i_clk) 
+    always_ff @(posedge i_clk) 
     begin
         if (stb)
         begin
@@ -120,7 +114,7 @@ module walk_on_req(i_clk, i_req, o_led);
 
     // Set outputs/LEDs
 
-    always @(led_state) 
+    always_comb @(led_state) 
     begin
         case (led_state)
             led_state_0:    o_led = 4'h01;
