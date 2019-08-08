@@ -82,3 +82,8 @@ chmod +x simulate.sh
 git add build.sh
 git add simulate.sh
 git add ${PRJ_NAME}.*
+
+echo "Add yourself to the  dialout and tty groups:"
+echo " $ sudo usermod -a -G tty my-user-name"
+echo " $ sudo usermod -a -G dialout my-user-name"
+echo "and re-login"
