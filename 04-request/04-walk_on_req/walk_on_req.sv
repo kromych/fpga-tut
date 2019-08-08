@@ -38,8 +38,8 @@
 
 module walk_on_req
     # (parameter COUNTER_WIDTH = 25)
-    (input wire i_clk,
-    input wire i_req,
+    (input logic i_clk,
+    input logic i_req,
     output logic[3:0] o_led);
 
     localparam led_state_off = 3'b110; /* x x x x  */
@@ -51,8 +51,8 @@ module walk_on_req
     localparam led_state_4 = 3'b100; /* x x 0 x  */
     localparam led_state_5 = 3'b101; /* x 0 x x  */
 
-    logic [COUNTER_WIDTH-1:0] counter = 0;
-    logic stb = 1'b0;
+    logic [COUNTER_WIDTH-1:0] counter = '0;
+    logic stb = '0;
 
     logic [2:0] led_state = led_state_off;
    
@@ -64,10 +64,10 @@ module walk_on_req
 
     // Debounce i_req
 
-    logic req             = 1'b0;
-    logic req_sync_pipe   = 1'b0;
-    logic req_last        = 1'b0;
-    logic start_walking   = 1'b0;
+    logic req             = '0;
+    logic req_sync_pipe   = '0;
+    logic req_last        = '0;
+    logic start_walking   = '0;
 
     always_ff @(posedge i_clk)
     begin
@@ -114,7 +114,7 @@ module walk_on_req
 
     // Set outputs/LEDs
 
-    always_comb @(led_state) 
+    always_comb
     begin
         case (led_state)
             led_state_0:    o_led = 4'h01;
