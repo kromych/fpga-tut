@@ -1,12 +1,28 @@
 #!/bin/bash
 
 PRJ_NAME=$1
+BOARD=$2
 
 if [ "$1" == "" ]
 then
     echo "Need project name!"
     exit
 fi
+
+case "${BOARD}" in
+    goboard)    
+    ;;
+
+    tinybx)
+        echo "Please remove/disable any software that may interfere with serial ports"
+        echo "such as modemmanager: sudo apt-get purge modemmanager"
+    ;;
+
+    *)          
+        echo "unknown board"
+        exit
+    ;;
+esac
 
 echo '`default_nettype none' > ${PRJ_NAME}.v
 
