@@ -26,11 +26,7 @@ module shift(i_clk, o_led);
     input wire i_clk;
     output reg[LED_COUNT-1:0] o_led;
 
-`ifndef verilator
-    initial o_led = LED_COUNT'h1;
-`else
-    initial o_led = 4'h1;
-`endif
+    initial o_led = '1;
 
     reg [COUNTER_WIDTH-1:0] counter;
     reg stb;

@@ -1,2 +1,2 @@
 PRJ_NAME=stretch
-. ../00-infra/build-main.sh
+. ../../00-infra/build-main.sh

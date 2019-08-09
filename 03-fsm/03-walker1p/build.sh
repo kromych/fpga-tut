@@ -1,3 +1,3 @@
 PRJ_NAME=walker
 
-. ../00-infra/build-main.sh
+. ../../00-infra/build-main.sh

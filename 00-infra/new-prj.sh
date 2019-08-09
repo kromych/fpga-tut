@@ -1,12 +1,28 @@
 #!/bin/bash
 
 PRJ_NAME=$1
+BOARD=$2
 
 if [ "$1" == "" ]
 then
     echo "Need project name!"
     exit
 fi
+
+case "${BOARD}" in
+    goboard)    
+    ;;
+
+    tinybx)
+        echo "Please remove/disable any software that may interfere with serial ports"
+        echo "such as modemmanager: sudo apt-get purge modemmanager"
+    ;;
+
+    *)          
+        echo "unknown board"
+        exit
+    ;;
+esac
 
 echo '`default_nettype none' > ${PRJ_NAME}.v
 
@@ -45,7 +61,7 @@ int main(int argc, char **argv)
 }
 EOT
 
-cat <<EOT > "${PRJ_NAME}.pcf"
+cat <<EOT > "${PRJ_NAME}-${BOARD}.pcf"
 set_io i_sw P13
 set_io o_led C8
 EOT
@@ -60,15 +76,14 @@ PRJ_NAME=${PRJ_NAME}
 . ../00-infra/simulate-main.sh
 EOT
 
-cat <<EOT > upload.sh
-iceprog v_out/${PRJ_NAME}.bin
-EOT
-
 chmod +x build.sh
 chmod +x simulate.sh
-chmod +x upload.sh
 
 git add build.sh
 git add simulate.sh
-git add upload.sh
-git add ${PRJ_NAME}.*
+git add ${PRJ_NAME}*
+
+echo "Add yourself to the dialout and tty groups:"
+echo " $ sudo usermod -a -G tty my-user-name"
+echo " $ sudo usermod -a -G dialout my-user-name"
+echo "and re-login"
