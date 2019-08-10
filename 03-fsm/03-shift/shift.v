@@ -26,7 +26,7 @@ module shift(i_clk, o_led);
     input wire i_clk;
     output reg[LED_COUNT-1:0] o_led;
 
-    initial o_led = '1;
+    initial o_led = 1'b1;
 
     reg [COUNTER_WIDTH-1:0] counter;
     reg stb;
