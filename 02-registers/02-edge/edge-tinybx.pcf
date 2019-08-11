@@ -1,0 +1,5 @@
+set_io --warn-no-port i_clk             B2
+
+set_io --warn-no-port in                A2
+set_io --warn-no-port o_rising_edge     A1
+set_io --warn-no-port o_falling_edge    B1

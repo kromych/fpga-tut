@@ -68,12 +68,12 @@ EOT
 
 cat <<EOT > build.sh
 PRJ_NAME=${PRJ_NAME}
-. ../00-infra/build-main.sh
+. ../../00-infra/build-main.sh
 EOT
 
 cat <<EOT > simulate.sh
 PRJ_NAME=${PRJ_NAME}
-. ../00-infra/simulate-main.sh
+. ../../00-infra/simulate-main.sh
 EOT
 
 chmod +x build.sh
