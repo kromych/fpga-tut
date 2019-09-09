@@ -38,9 +38,10 @@ PNR="nextpnr-ice40 ${CHIP} ${CHIP_PACKAGE}"
 PACK=icepack
 
 mkdir -p ${OUT_DIR}
+MODULES=(`find . -type f -name "*.v" -a ! -name "${PRJ_NAME}.v"`)
 
 echo "Running synthesis..."
-${YOSYS} -p "${SYNTH}" "${PRJ_NAME}.v" > "${OUT_DIR}/synth-${BOARD}.log"
+${YOSYS} -g -p "${SYNTH}" "${PRJ_NAME}.v" "${MODULES[@]}" > "${OUT_DIR}/synth-${BOARD}.log"
 
 echo "Running place-and-route..."
 ${PNR} --pcf "${PCF}" --json "${JSON}" --asc "${ASCII}" -q -l "${OUT_DIR}/pnr-${BOARD}.log"
