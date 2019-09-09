@@ -37,10 +37,10 @@
 `default_nettype none
 
 module walk_on_req
-    # (parameter COUNTER_WIDTH = 25)
-    (input logic i_clk,
-    input logic i_req,
-    output logic[3:0] o_led);
+    # (parameter COUNTER_WIDTH = 2)
+    (input i_clk,
+    input i_req,
+    output reg [3:0] o_led);
 
     localparam led_state_off = 3'b110; /* x x x x  */
 
@@ -51,16 +51,16 @@ module walk_on_req
     localparam led_state_4 = 3'b100; /* x x 0 x  */
     localparam led_state_5 = 3'b101; /* x 0 x x  */
 
-    logic [COUNTER_WIDTH-1:0] counter = '0;
-    logic stb = '0;
+    reg [COUNTER_WIDTH-1:0] counter = '0;
+    reg stb = '0;
 
-    logic [2:0] led_state = led_state_off;
+    reg [2:0] led_state = led_state_off;
    
-    initial o_led = 4'h00;
+    initial o_led = 4'h0;
    
     // Busy
 
-    logic busy;
+    reg busy;
 
     // Debounce i_req
 
@@ -69,12 +69,12 @@ module walk_on_req
     logic req_last        = '0;
     logic start_walking   = '0;
 
-    always_ff @(posedge i_clk)
+    always @(posedge i_clk)
     begin
 	    {req, req_sync_pipe} <= {req_sync_pipe, i_req};
     end
 
-    always_ff @(posedge i_clk)
+    always @(posedge i_clk)
     begin
         req_last <= req;
         start_walking <= req && !req_last;
@@ -82,14 +82,14 @@ module walk_on_req
 
     // Divide the clock
 
-    always_ff @(posedge i_clk) 
+    always @(posedge i_clk) 
     begin
         {stb, counter} <= counter + 1'b1;
     end
 
     // Change state
 
-    always_ff @(posedge i_clk) 
+    always @(posedge i_clk) 
     begin
         if (stb)
         begin
@@ -114,17 +114,17 @@ module walk_on_req
 
     // Set outputs/LEDs
 
-    always_comb
+    always @(*)
     begin
         case (led_state)
-            led_state_0:    o_led = 4'h01;
-            led_state_1:    o_led = 4'h02;
-            led_state_2:    o_led = 4'h04;
-            led_state_3:    o_led = 4'h08;
-            led_state_4:    o_led = 4'h04;
-            led_state_5:    o_led = 4'h02;
-            led_state_off:  o_led = 4'h00;
-            default:        o_led = 4'h00;
+            led_state_0:    o_led = 4'h1;
+            led_state_1:    o_led = 4'h2;
+            led_state_2:    o_led = 4'h4;
+            led_state_3:    o_led = 4'h8;
+            led_state_4:    o_led = 4'h4;
+            led_state_5:    o_led = 4'h2;
+            led_state_off:  o_led = 4'h0;
+            default:        o_led = 4'h0;
         endcase
     end
 

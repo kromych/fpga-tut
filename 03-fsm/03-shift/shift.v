@@ -52,11 +52,12 @@ The icepll utility generates the code.
 
 `default_nettype none
 
-module shift(i_clk, o_led);
-    parameter COUNTER_WIDTH = 25;
+module shift(i_clk, o_led, o_clk);
+    parameter COUNTER_WIDTH = 1;
     parameter LED_COUNT = 4;
 
     input wire i_clk;
+    output wire o_clk;
     output reg[LED_COUNT-1:0] o_led;
 
     initial o_led = 1'b1;
@@ -78,5 +79,7 @@ module shift(i_clk, o_led);
             o_led <= {o_led[LED_COUNT-2:0], o_led[LED_COUNT-1]};
         end    
     end
+
+    assign o_clk = i_clk;
 
 endmodule

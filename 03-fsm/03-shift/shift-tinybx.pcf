@@ -1,6 +1,7 @@
-set_io --warn-no-port o_led[0] B7
-set_io --warn-no-port o_led[1] A7
-set_io --warn-no-port o_led[2] B6
-set_io --warn-no-port o_led[3] A6
+set_io --warn-no-port o_led[0] A8
+set_io --warn-no-port o_led[1] B7
+set_io --warn-no-port o_led[2] A7
+set_io --warn-no-port o_led[3] B6
+set_io --warn-no-port o_clk    A6
 
 set_io --warn-no-port i_clk B2

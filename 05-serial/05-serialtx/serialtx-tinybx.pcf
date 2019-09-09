@@ -1,3 +1,11 @@
-set_io --warn-no-port o_uart_tx A6
+#set_io --warn-no-port pin_17 C9
+#set_io --warn-no-port pin_18 A9
+
+set_io --warn-no-port o_state[3]    B8
+set_io --warn-no-port o_state[2]    A8
+set_io --warn-no-port o_state[1]    B7
+set_io --warn-no-port o_state[0]    A7
+set_io --warn-no-port o_enable      B6
+set_io --warn-no-port o_uart_tx     A6
 
 set_io --warn-no-port i_clk B2
