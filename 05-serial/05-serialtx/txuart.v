@@ -1,13 +1,8 @@
 `default_nettype none
 
-module txuart 
-    #(parameter CLOCK_FREQUENCY = 16_000_000, 
-      parameter BAUD_RATE = 115_200)
-    (i_clk, i_enable, i_data, o_busy, o_uart_tx);
+// Uses 115200 Hz clock derived from 16MHz
 
-    localparam CLK_WAIT_COUNT = CLOCK_FREQUENCY/BAUD_RATE/2;
-
-    reg [7:0]   wait_counter = '0;
+module txuart(i_clk, i_enable, i_data, o_busy, o_uart_tx, o_uart_clk);
 
     input       i_clk;
     input [7:0] i_data;
@@ -17,6 +12,7 @@ module txuart
     output reg  o_uart_tx;
 
     localparam  START = 4'h0;
+
     localparam  BIT_0 = 4'h1;
     localparam  BIT_1 = 4'h2;
     localparam  BIT_2 = 4'h3;
@@ -26,64 +22,61 @@ module txuart
     localparam  BIT_6 = 4'h7;
     localparam  BIT_7 = 4'h8;
     localparam  STOP  = 4'h9;
+
     localparam  IDLE  = 4'hf;
 
-    reg [7:0]   buffer;
+    reg [8:0]   shifter = 9'h1ff;
     reg [3:0]   state = IDLE;
+/*
+    // 115200 Hz
+
+    reg [11:0]  d;
+    wire [11:0] dInc = d[11] ? (9) : (9 - 1250);
+    wire [11:0] dNxt = d + dInc;
+    always @(posedge i_clk)
+    begin
+        d = dNxt;
+    end
+
+    output o_uart_clk = ~d[11]; 
+*/
+
+    // 9600 Hz
+    
+    reg [13:0]  d;
+    wire [13:0] dInc = d[13] ? (3) : (3 - 5000);
+    wire [13:0] dNxt = d + dInc;
+    always @(posedge i_clk)
+    begin
+        d = dNxt;
+    end
+
+    output o_uart_clk = ~d[13]; 
+
+    assign o_uart_tx = shifter[0];
 
     always @(posedge i_clk)
     begin
         if (state == IDLE)
         begin
-            wait_counter <= 1'b1;
-
             if (i_enable)
             begin
-                o_uart_tx   <= 1'b0; 
-                buffer      <= i_data;
-                state       <= START;
-            end
-            else
-            begin
-                o_uart_tx   <= 1'bz; 
-                state       <= IDLE;
+                shifter <= {i_data[7:0], 1'b0};
+                state   <= START;
             end
         end
         else
         begin
-            if (state < STOP)
+            if (o_uart_clk)
             begin
-                if (wait_counter == 0)
+                if (state < STOP)
                 begin
-                    o_uart_tx       <= buffer[0]; 
-                    buffer          <= {buffer[0], buffer[7:1]};
-                    wait_counter    <= 1'b1;
-                end
-                else if (wait_counter < CLK_WAIT_COUNT)
-                begin
-                    wait_counter    <= wait_counter + 1;
+                    shifter <= {1'b1, shifter[8:1]};
+                    state   <= state + 1'b1; 
                 end
                 else
                 begin
-                    state           <= state + 1'b1; 
-                    wait_counter    <= '0;
-                end
-            end
-            else
-            begin
-                if (wait_counter == 0)
-                begin
-                    o_uart_tx       <= 1'b1;
-                    wait_counter    <= 1'b1;
-                end
-                else if (wait_counter < CLK_WAIT_COUNT)
-                begin
-                    wait_counter    <= wait_counter + 1;
-                end
-                else
-                begin
-                    state           <= IDLE; 
-                    wait_counter    <= 1'b1;
+                    state   <= IDLE; 
                 end
             end
         end
