@@ -1,13 +1,13 @@
 `default_nettype none
 
-module txuart(i_clk, i_write, i_data, o_busy, o_uart_tx);
+module uart_tx(i_clk, i_write, i_data, o_busy, o_uart_tx);
 
     input       i_clk;
     input [7:0] i_data;
     input       i_write;
 
-    output      o_busy; 
-    output reg  o_uart_tx;
+    output      o_busy;
+    output reg  o_uart_tx = 1'b1;
 
     localparam  BIT_0 = 4'h0;
     localparam  BIT_1 = 4'h1;
@@ -26,6 +26,11 @@ module txuart(i_clk, i_write, i_data, o_busy, o_uart_tx);
 
     assign      o_busy = ~(&state[3:0]);
 
+`ifdef TESTING
+
+    wire uart_clk = i_clk;
+
+`else
     // 115200 Hz / 16000000 Hz = 9 / 1250
 
     reg [11:0]      wait_counter;
@@ -37,7 +42,7 @@ module txuart(i_clk, i_write, i_data, o_busy, o_uart_tx);
         wait_counter = wait_counter_next;
     end
 
-    wire uart_clk = ~wait_counter[11]; 
+    wire uart_clk = ~wait_counter[11];
 
 /*
     // 9600 Hz / 16000000 Hz = 3 / 5000
@@ -51,12 +56,13 @@ module txuart(i_clk, i_write, i_data, o_busy, o_uart_tx);
         wait_counter = wait_counter_next;
     end
 
-    wire uart_clk = ~wait_counter[13]; 
+    wire uart_clk = ~wait_counter[13];
 */
+`endif
 
     reg [7:0]   shifter = 8'hff;
 
-    // For "He" (01100101_01001000) the bits on the wire will be 
+    // For "He" (01100101_01001000) the bits on the wire will be
     // (LSB first): 11_01100101_0_11_01001000_0_11
 
     reg [3:0]   data_counter = '0;
@@ -65,36 +71,12 @@ module txuart(i_clk, i_write, i_data, o_busy, o_uart_tx);
     begin
         if (state == IDLE)
         begin
-            case (data_counter)
-                4'h0: shifter <= "H";
-                4'h1: shifter <= "e";
-                4'h2: shifter <= "l";
-                4'h3: shifter <= "l";
-                4'h4: shifter <= "o";
-                4'h5: shifter <= ",";
-                4'h6: shifter <= " ";
-                4'h7: shifter <= "w";
-                4'h8: shifter <= "o";
-                4'h9: shifter <= "r";
-                4'ha: shifter <= "l";
-                4'hb: shifter <= "d";
-                4'hc: shifter <= "!";
-                4'hd: shifter <= " ";
-                4'he: shifter <= '0;
-                default: shifter <= '0;
-            endcase
-
-            if (data_counter == 4'he)
+            if (i_write)
             begin
-                data_counter <= 0;
+                shifter     <= i_data;
+                o_uart_tx   <= 1'b1;
+                state       <= START;
             end
-            else
-            begin
-                data_counter <= data_counter + 1;
-            end;
-
-            o_uart_tx   <= 1'b1;
-            state       <= START;
         end
         else if (state == START)
         begin
@@ -109,7 +91,7 @@ module txuart(i_clk, i_write, i_data, o_busy, o_uart_tx);
         else if (state <= BIT_7)
         begin
             o_uart_tx   <= shifter[state];
-            state       <= state + 1'b1; 
+            state       <= state + 1'b1;
         end
         else
         begin
