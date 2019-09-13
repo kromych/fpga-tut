@@ -1,15 +1,12 @@
 `default_nettype none
 
-module input_data(i_clk, i_get_next, o_data, o_data_end);
+module input_data(i_clk, i_get_next, o_data);
 
     input               i_clk;
     input               i_get_next;
     output reg [7:0]    o_data;
-    output              o_data_end;
 
     reg [3:0]           index = 4'h00;
-
-    assign              o_data_end = index == 4'hc;
 
     always @(posedge i_clk)
     begin
@@ -35,9 +32,16 @@ module input_data(i_clk, i_get_next, o_data, o_data_end);
 
     always @(posedge i_clk)
     begin
-        if (i_get_next && !o_data_end)
+        if (i_get_next)
         begin
-            index <= index + 1'b1;
+            if (index == 4'hd)
+            begin
+                index <= 0;
+            end
+            else
+            begin
+                index <= index + 1'b1;
+            end
         end
     end
 
