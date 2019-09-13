@@ -6,7 +6,7 @@ module input_data(i_clk, i_get_next, o_data);
     input               i_get_next;
     output reg [7:0]    o_data;
 
-    reg [3:0]           index = 4'h00;
+    reg [3:0]           index = 4'h0;
 
     always @(posedge i_clk)
     begin
