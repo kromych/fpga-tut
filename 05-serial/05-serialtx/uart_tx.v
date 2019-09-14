@@ -65,7 +65,42 @@ module uart_tx(i_clk, i_write, i_data, o_busy, o_uart_tx);
     // For "He" (01100101_01001000) the bits on the wire will be
     // (LSB first): 11_01100101_0_11_01001000_0_11
 
-    reg [3:0]   data_counter = '0;
+    // reg [4'hd*8:1] data = "Hello, world! ";
+
+    wire [7:0]  data[0:4'hf];
+
+    assign      data[4'h0] = " ";
+    assign      data[4'h1] = "H";
+    assign      data[4'h2] = "e";
+    assign      data[4'h3] = "l";
+    assign      data[4'h4] = "l";
+    assign      data[4'h5] = "o";
+    assign      data[4'h6] = ",";
+    assign      data[4'h7] = " ";
+    assign      data[4'h8] = "w";
+    assign      data[4'h9] = "o";
+    assign      data[4'ha] = "r";
+    assign      data[4'hb] = "l";
+    assign      data[4'hc] = "d";
+    assign      data[4'hd] = "!";
+    assign      data[4'he] = " ";
+
+    reg [3:0]   index   = 4'h0;
+
+    always @(posedge uart_clk)
+    begin
+        if (i_write)
+        begin
+            if (index == 4'hf)
+            begin
+                index <= '0;
+            end
+            else
+            begin
+                index <= index + 1'b1;
+            end
+        end
+    end
 
     always @(posedge uart_clk)
     begin
@@ -73,7 +108,7 @@ module uart_tx(i_clk, i_write, i_data, o_busy, o_uart_tx);
         begin
             if (i_write)
             begin
-                shifter     <= i_data;
+                shifter     <= data[index];
                 o_uart_tx   <= 1'b1;
                 state       <= START;
             end
