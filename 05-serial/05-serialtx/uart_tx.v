@@ -18,9 +18,10 @@ module uart_tx(i_clk, i_write, i_data, o_busy, o_uart_tx);
     localparam  BIT_6 = 4'h6;
     localparam  BIT_7 = 4'h7;
 
-    localparam  START = 4'hd;
-    localparam  STOP  = 4'he;
-    localparam  IDLE  = 4'hf;
+    localparam  GOT_BYTE = 4'hc;
+    localparam  START    = 4'hd;
+    localparam  STOP     = 4'he;
+    localparam  IDLE     = 4'hf;
 
     reg [3:0]   state = IDLE;
 
@@ -32,7 +33,7 @@ module uart_tx(i_clk, i_write, i_data, o_busy, o_uart_tx);
 
 `else
     // 115200 Hz / 16000000 Hz = 9 / 1250
-
+/*
     reg [11:0]      wait_counter;
     wire [11:0]     wait_counter_incr = wait_counter[11] ? (9) : (9 - 1250);
     wire [11:0]     wait_counter_next = wait_counter + wait_counter_incr;
@@ -43,6 +44,21 @@ module uart_tx(i_clk, i_write, i_data, o_busy, o_uart_tx);
     end
 
     wire uart_clk = ~wait_counter[11];
+*/
+    // 115200 Hz / 25000000 Hz = 72 / 15625
+
+    localparam WAIT_COUNTER_WIDTH = 15;
+
+    reg [WAIT_COUNTER_WIDTH-1:0]      wait_counter;
+    wire [WAIT_COUNTER_WIDTH-1:0]     wait_counter_incr = wait_counter[WAIT_COUNTER_WIDTH-1] ? (72) : (72 - 15625);
+    wire [WAIT_COUNTER_WIDTH-1:0]     wait_counter_next = wait_counter + wait_counter_incr;
+
+    always @(posedge i_clk)
+    begin
+        wait_counter = wait_counter_next;
+    end
+
+    wire uart_clk = ~wait_counter[WAIT_COUNTER_WIDTH-1];
 
 /*
     // 9600 Hz / 16000000 Hz = 3 / 5000
@@ -67,51 +83,21 @@ module uart_tx(i_clk, i_write, i_data, o_busy, o_uart_tx);
 
     // reg [4'hd*8:1] data = "Hello, world! ";
 
-    wire [7:0]  data[0:4'hf];
-
-    assign      data[4'h0] = " ";
-    assign      data[4'h1] = "H";
-    assign      data[4'h2] = "e";
-    assign      data[4'h3] = "l";
-    assign      data[4'h4] = "l";
-    assign      data[4'h5] = "o";
-    assign      data[4'h6] = ",";
-    assign      data[4'h7] = " ";
-    assign      data[4'h8] = "w";
-    assign      data[4'h9] = "o";
-    assign      data[4'ha] = "r";
-    assign      data[4'hb] = "l";
-    assign      data[4'hc] = "d";
-    assign      data[4'hd] = "!";
-    assign      data[4'he] = " ";
-
-    reg [3:0]   index   = 4'h0;
-
-    always @(posedge uart_clk)
-    begin
-        if (i_write)
-        begin
-            if (index == 4'hf)
-            begin
-                index <= '0;
-            end
-            else
-            begin
-                index <= index + 1'b1;
-            end
-        end
-    end
-
     always @(posedge uart_clk)
     begin
         if (state == IDLE)
         begin
             if (i_write)
             begin
-                shifter     <= data[index];
+                shifter     <= i_data;
                 o_uart_tx   <= 1'b1;
-                state       <= START;
+                state       <= GOT_BYTE;
             end
+        end
+        else if (state == GOT_BYTE)
+        begin
+            o_uart_tx   <= 1'b1;
+            state       <= START;
         end
         else if (state == START)
         begin

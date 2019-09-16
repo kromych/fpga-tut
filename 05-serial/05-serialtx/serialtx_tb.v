@@ -12,10 +12,11 @@
 module serialtx_tb();
 
     reg         clk;
+
     wire        write;
-    reg [7:0]   data;
-    reg         busy;
-    reg         uart_tx;
+    wire [7:0]  data;
+    wire        busy;
+    wire        uart_tx;
 
     // Device Under Test
 
@@ -46,8 +47,8 @@ module serialtx_tb();
 
     initial
     begin
-        $display("\t\ttime,\trealtime,\tclk,\tbusy,\tuart_tx");
-        $monitor("%d,\t%d,\t\t%b,\t%b,\t%b,",$time, $realtime, clk, busy, uart_tx);
+        $display("\t\ttime,\trealtime,\tclk,\tbusy,\ttx");
+        $monitor("%d,\t%d,\t\t%b,\t%b,\t%x,\t%b,",$time, $realtime, clk, busy, uart_tx);
     end
 
     initial
