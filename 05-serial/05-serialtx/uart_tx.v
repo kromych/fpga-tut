@@ -1,6 +1,7 @@
 `default_nettype none
 
-module uart_tx(i_clk, i_write, i_data, o_busy, o_uart_tx);
+module uart_tx #(parameter CLOCK_MHZ = 16, parameter BAUD_RATE = 115200)
+                (i_clk, i_write, i_data, o_busy, o_uart_tx);
 
     input       i_clk;
     input [7:0] i_data;
@@ -32,8 +33,28 @@ module uart_tx(i_clk, i_write, i_data, o_busy, o_uart_tx);
     wire uart_clk = i_clk;
 
 `else
-    // 115200 Hz / 16000000 Hz = 9 / 1250
+
+    // Integer clock divider
+
+    reg [7:0]   wait_counter = '0;
+    wire        uart_clk = ~(|wait_counter);
+
+    always @(posedge i_clk)
+    begin
+        if (wait_counter <= CLOCK_MHZ*1_000_000/BAUD_RATE)
+        begin
+            wait_counter <= wait_counter + 1'b1;
+        end
+        else
+        begin
+            wait_counter <= '0;
+        end
+    end
+
+    // Rational clock dividers
 /*
+    // 115200 Hz / 16000000 Hz = 9 / 1250
+
     reg [11:0]      wait_counter;
     wire [11:0]     wait_counter_incr = wait_counter[11] ? (9) : (9 - 1250);
     wire [11:0]     wait_counter_next = wait_counter + wait_counter_incr;
@@ -45,6 +66,7 @@ module uart_tx(i_clk, i_write, i_data, o_busy, o_uart_tx);
 
     wire uart_clk = ~wait_counter[11];
 */
+/*
     // 115200 Hz / 25000000 Hz = 72 / 15625
 
     localparam WAIT_COUNTER_WIDTH = 15;
@@ -59,7 +81,7 @@ module uart_tx(i_clk, i_write, i_data, o_busy, o_uart_tx);
     end
 
     wire uart_clk = ~wait_counter[WAIT_COUNTER_WIDTH-1];
-
+*/
 /*
     // 9600 Hz / 16000000 Hz = 3 / 5000
 

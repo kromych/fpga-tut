@@ -10,11 +10,12 @@ module serialtx_top(i_clk, o_uart_tx);
     wire        transmit;
 
     input_data  data_source(
-                            .i_clk(i_clk),
                             .i_get_next(transmit),
                             .o_data(data));
 
-    uart_tx     uart(
+    uart_tx #(.CLOCK_MHZ(16),.BAUD_RATE(115200))
+                uart 
+                    (
                     .i_clk(i_clk),
                     .i_write(transmit),
                     .i_data(data),
