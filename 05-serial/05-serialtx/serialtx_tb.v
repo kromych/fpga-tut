@@ -6,6 +6,7 @@
 
 `define TESTING
 
+`include "uart_clock.v"
 `include "uart_tx.v"
 `include "input_data.v"
 
@@ -20,15 +21,14 @@ module serialtx_tb();
 
     // Device Under Test
 
-    uart_tx     dut(
-        .i_clk(clk),
+    uart_tx     _dut(
+        .i_uart_clk(clk),
         .i_write(write),
         .i_data(data),
         .o_busy(busy),
         .o_uart_tx(uart_tx));
 
-    input_data  dut_input(
-        .i_clk(clk),
+    input_data  _dut_input(
         .i_get_next(write),
         .o_data(data));
 
@@ -48,7 +48,7 @@ module serialtx_tb();
     initial
     begin
         $display("\t\ttime,\trealtime,\tclk,\tbusy,\ttx");
-        $monitor("%d,\t%d,\t\t%b,\t%b,\t%x,\t%b,",$time, $realtime, clk, busy, uart_tx);
+        $monitor("%d,\t%d,\t\t%b,\t%b,\t%b,",$time, $realtime, clk, busy, uart_tx);
     end
 
     initial
